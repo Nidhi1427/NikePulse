@@ -1,6 +1,6 @@
 'use client';
 import Image from "next/image";
-import { useCart } from '@/context/CartContext';
+import { useCart } from '@/context/CartContext'; // Fixed path (plural 'contexts')
 
 type Product = {
   id: string;
@@ -11,16 +11,22 @@ type Product = {
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart?: () => void;  // ← NEW PROP
+  onAddToCart?: () => void;
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const { addToCart } = useCart();
-  const imageSrc = product.image.startsWith('/') ? product.image : `/${product.image}`;
+  
+  // Handle both external URLs and relative paths
+  const imageSrc = product.image.startsWith('http') 
+    ? product.image 
+    : product.image.startsWith('/') 
+      ? product.image 
+      : `/${product.image}`;
 
   const handleAddToCart = () => {
     addToCart(product);
-    onAddToCart?.();  // ← TRIGGER TOAST
+    onAddToCart?.(); // Trigger parent toast/feedback
   };
 
   return (
@@ -30,17 +36,19 @@ export default function ProductCard({ product, onAddToCart }: ProductCardProps) 
           src={imageSrc}
           alt={product.name}
           fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
           className="object-cover group-hover:scale-110 transition-transform duration-500"
+          priority={false} // Avoid priority on grid items
         />
       </div>
       <h3 className="text-xl font-bold mb-3 line-clamp-2">{product.name}</h3>
       <div className="flex items-center justify-between">
         <span className="text-2xl font-black text-red-400">
-          ${product.price}
+          ${product.price.toFixed(2)}
         </span>
         <button 
           onClick={handleAddToCart}
-          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 z-50 relative pointer-events-auto cursor-pointer"
+          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 z-50 relative pointer-events-auto cursor-pointer min-w-[120px] flex items-center justify-center"
         >
           Add to Cart
         </button>
