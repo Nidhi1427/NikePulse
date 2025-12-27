@@ -1,5 +1,4 @@
 'use client';
-
 import Image from "next/image";
 import { useCart } from '@/context/CartContext';
 
@@ -10,9 +9,19 @@ type Product = {
   image: string;
 };
 
-export default function ProductCard({ product }: { product: Product }) {
+interface ProductCardProps {
+  product: Product;
+  onAddToCart?: () => void;  // ← NEW PROP
+}
+
+export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const { addToCart } = useCart();
   const imageSrc = product.image.startsWith('/') ? product.image : `/${product.image}`;
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    onAddToCart?.();  // ← TRIGGER TOAST
+  };
 
   return (
     <div className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20 relative z-10">
@@ -30,7 +39,7 @@ export default function ProductCard({ product }: { product: Product }) {
           ${product.price}
         </span>
         <button 
-          onClick={() => addToCart(product)}
+          onClick={handleAddToCart}
           className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 z-50 relative pointer-events-auto cursor-pointer"
         >
           Add to Cart
