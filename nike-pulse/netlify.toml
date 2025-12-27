@@ -1,5 +1,5 @@
 [build]
-  command = "npm run build"
+  command = "npm ci && npm run build"
   publish = ".next"
   environment = { NODE_VERSION = "20" }
 
@@ -8,3 +8,7 @@
 
 [build.processing]
   skip_processing = true
+
+# Force longer timeout
+[build.environment]
+  NPM_FLAGS = "--max-timeout=1200000"
