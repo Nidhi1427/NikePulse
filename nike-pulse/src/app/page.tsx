@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/lib/firebase";
-import ProductCard from "./ProductCard";
 import Navbar from "@/components/ui/Navbar";
 import ScrollToShopButton from "@/components/ScrollToShopButton";
 import { CartProvider } from "@/context/CartContext";
@@ -10,32 +9,52 @@ import ClientShopSection from "./ClientShopSection";
 type Product = {
   id: string;
   name: string;
-  price: number;   // dollars
-  image: string;   // url or /images/...
+  price: number;
+  image: string;
+  category?: string;
 };
 
 async function getProducts(): Promise<Product[]> {
   try {
+    console.log("🔥 Firestore: Starting products query...");
+    
     const snap = await getDocs(collection(db, "products"));
-    return snap.docs.map((doc) => ({
-      id: doc.id,
-      ...(doc.data() as Omit<Product, "id">),
-    }));
-  } catch (error) {
-    console.error("Error fetching products:", error);
+    
+    console.log("🔥 Firestore: Found", snap.docs.length, "products");
+    
+    const products = snap.docs.map((doc) => {
+      const data = doc.data() as Omit<Product, "id">;
+      console.log("🔥 Product ID:", doc.id, "Name:", data.name);
+      return {
+        id: doc.id,
+        ...data,
+      };
+    });
+    
+    console.log("✅ Firestore: Loaded", products.length, "products");
+    return products;
+    
+  } catch (error: any) {
+    console.error("❌ FIRESTORE ERROR:", error.message);
+    console.error("❌ Full error:", error);
     return [];
   }
 }
 
 export default async function Home() {
+  console.log("🚀 PAGE LOADING - Vercel Server...");
+  
   const products = await getProducts();
-
+  
+  console.log("🎉 SERVER PRODUCTS COUNT:", products.length);
+  console.log("🎉 SAMPLE PRODUCTS:", products.slice(0, 2));
+  
   return (
     <CartProvider>
       <>
         <Navbar />
         <main className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-red-900/20 text-white overflow-x-hidden pt-20">
-          {/* Hero - YOUR ORIGINAL */}
+          {/* Hero */}
           <section className="relative h-screen flex flex-col justify-center items-center px-4 overflow-hidden">
             <div className="absolute inset-0 bg-grid-nike opacity-50" />
             <Image
@@ -55,10 +74,10 @@ export default async function Home() {
             <ScrollToShopButton />
           </section>
 
-          {/* Products - YOUR ORIGINAL → ClientShopSection */}
+          {/* Products */}
           <ClientShopSection initialProducts={products} id="shop" />
 
-          {/* About - YOUR ORIGINAL */}
+          {/* About */}
           <section className="py-24 px-4 bg-gradient-to-b from-gray-900/50 to-black/70" id="about">
             <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
               <div>
@@ -95,7 +114,7 @@ export default async function Home() {
             </div>
           </section>
 
-          {/* Wishlist - YOUR ORIGINAL */}
+          {/* Wishlist */}
           <section className="py-24 px-4 bg-gradient-to-b from-black/70 to-gray-950" id="wishlist">
             <div className="max-w-6xl mx-auto text-center">
               <h2 className="text-5xl md:text-7xl font-black mb-8 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
@@ -130,7 +149,7 @@ export default async function Home() {
             </div>
           </section>
 
-          {/* Contact - YOUR ORIGINAL */}
+          {/* Contact */}
           <section className="py-24 px-4 bg-gradient-to-b from-gray-950 to-black" id="contact">
             <div className="max-w-4xl mx-auto text-center">
               <h2 className="text-5xl md:text-7xl font-black mb-8 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
