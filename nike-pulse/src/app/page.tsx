@@ -75,7 +75,25 @@ export default async function Home() {
           </section>
 
           {/* Products */}
-          <ClientShopSection initialProducts={products} id="shop" />
+          {products.length > 0 ? (
+  <ClientShopSection initialProducts={products} id="shop" />
+) : (
+  <section id="shop" className="py-24 px-4">
+    <div className="max-w-6xl mx-auto text-center">
+      <h2 className="text-5xl md:text-7xl font-black mb-8 bg-gradient-to-r from-white to-red-300 bg-clip-text text-transparent">
+        🔥 NIKEPULSE SHOP LIVE!
+      </h2>
+      <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+        <div className="bg-white/10 border border-white/20 rounded-3xl p-8">
+          <h3 className="text-2xl font-bold mb-4">Nike Air Force 1</h3>
+          <p className="text-4xl font-black text-red-400 mb-4">$120</p>
+          <p className="text-gray-300">Firestore loaded {products.length} products</p>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
+
 
           {/* About */}
           <section className="py-24 px-4 bg-gradient-to-b from-gray-900/50 to-black/70" id="about">
