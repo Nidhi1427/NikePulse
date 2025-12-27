@@ -1,56 +1,39 @@
 'use client';
-import { addToCart } from '@/lib/cart';
-import { useState } from 'react';
 
-interface Product {
+import Image from "next/image";
+import { useCart } from '@/context/CartContext';
+
+type Product = {
   id: string;
   name: string;
   price: number;
   image: string;
-}
+};
 
 export default function ProductCard({ product }: { product: Product }) {
-  const [isAdding, setIsAdding] = useState(false);
-
-  const handleAddToCart = () => {
-    if (isAdding) return;
-    setIsAdding(true);
-    addToCart(product);
-    setTimeout(() => setIsAdding(false), 800);
-  };
+  const { addToCart } = useCart();
+  const imageSrc = product.image.startsWith('/') ? product.image : `/${product.image}`;
 
   return (
-    <div className="group bg-gray-900/50 backdrop-blur-xl border border-gray-700/50 rounded-3xl p-8 hover:bg-gray-800/50 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-red-500/20 hover:border-red-500/50">
-      <div className="relative overflow-hidden rounded-2xl mb-6 aspect-video bg-gradient-to-br from-gray-800/50 to-transparent">
-        <img
-          src={product.image}
+    <div className="group bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 hover:bg-white/10 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-red-500/20 relative z-10">
+      <div className="relative overflow-hidden rounded-2xl mb-4 h-64">
+        <Image
+          src={imageSrc}
           alt={product.name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
-          loading="lazy"
+          fill
+          className="object-cover group-hover:scale-110 transition-transform duration-500"
         />
       </div>
-
-      <h3 className="text-2xl font-black text-white mb-4 group-hover:text-red-400 transition-colors">
-        {product.name}
-      </h3>
-      <p className="text-3xl font-black bg-gradient-to-r from-red-500 via-red-400 to-orange-500 bg-clip-text text-transparent mb-8">
-        ₹{product.price.toLocaleString()}
-      </p>
-
-      <div className="flex flex-col gap-4">
-        <button
-          onClick={handleAddToCart}
-          disabled={isAdding}
-          className={`w-full px-8 py-4 rounded-2xl font-black text-xl shadow-xl transition-all duration-300 flex items-center justify-center gap-2 ${
-            isAdding
-              ? 'bg-emerald-600/80 cursor-not-allowed scale-95 animate-pulse'
-              : 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 hover:shadow-emerald-500/50 hover:scale-[1.02]'
-          }`}
+      <h3 className="text-xl font-bold mb-3 line-clamp-2">{product.name}</h3>
+      <div className="flex items-center justify-between">
+        <span className="text-2xl font-black text-red-400">
+          ${product.price}
+        </span>
+        <button 
+          onClick={() => addToCart(product)}
+          className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-6 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:shadow-red-500/25 transition-all duration-300 z-50 relative pointer-events-auto cursor-pointer"
         >
-          {isAdding ? 'Adding...' : '🛒 Add to Cart'}
-        </button>
-        <button className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 px-8 py-4 rounded-2xl font-black text-xl shadow-xl hover:shadow-red-500/50 hover:scale-[1.02] transition-all duration-300">
-          🔔 Notify Me
+          Add to Cart
         </button>
       </div>
     </div>
