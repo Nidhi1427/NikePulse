@@ -2,16 +2,14 @@
 const nextConfig = {
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'via.placeholder.com',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-      },
+      { protocol: 'https', hostname: 'via.placeholder.com' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
+    // Netlify image optimization
+    unoptimized: true  // Required for Netlify
   },
+  // Disable Vercel-specific features
+  output: 'standalone',  // Better for Netlify SSR
   allowedDevOrigins: [
     'http://192.168.0.117:3000',
     'http://localhost:3000'
