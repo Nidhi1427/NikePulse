@@ -8,7 +8,6 @@ const nextConfig = {
       },
     ],
   },
-  // ✅ allowedDevOrigins is top-level (NOT experimental)
   allowedDevOrigins: [
     'http://192.168.0.117:3000',
     'http://localhost:3000'
