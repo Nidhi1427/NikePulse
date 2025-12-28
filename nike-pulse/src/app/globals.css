@@ -21,8 +21,10 @@ html {
 }
 
 body { 
-  background: linear-gradient(135deg, #000000 0%, #111827 50%, #1f2937 100%);
+  background: #000000;
   color: #ededed; 
   font-smooth: always;
+  overflow-x: hidden;
 }
+
 *[fdprocessedid] { display: none !important; }

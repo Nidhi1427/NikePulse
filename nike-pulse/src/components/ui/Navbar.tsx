@@ -32,22 +32,7 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center space-x-4">
-          <button
-  aria-label="Cart"
-  onClick={() => {
-    const modal = document.getElementById('cart-modal');
-    if (modal) modal.classList.remove('hidden');
-  }}
-  className="relative p-3 text-gray-300 hover:text-white transition-all duration-300 hover:scale-110"
->
-  🛒
-  {cartCount > 0 && (
-    <span className="bg-gradient-to-r from-orange-500 to-red-500 text-black text-xs font-black px-2 py-1 rounded-full ml-1 shadow-lg">
-  {cartCount}
-</span>
-
-  )}
-</button>
+        
 
 
           <button
