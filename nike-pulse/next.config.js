@@ -5,15 +5,14 @@ const nextConfig = {
       { protocol: 'https', hostname: 'via.placeholder.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
-    // Netlify image optimization
-    unoptimized: true  // Required for Netlify
+    unoptimized: true  // Required for static export + Netlify
   },
-  // Disable Vercel-specific features
-  output: 'standalone',  // Better for Netlify SSR
-  allowedDevOrigins: [
-    'http://192.168.0.117:3000',
-    'http://localhost:3000'
-  ],
+  output: 'export',  // STATIC HTML - no SSR issues
+  trailingSlash: true,
+  images: {
+    unoptimized: true
+  },
+  // Remove dev-only settings
 };
 
 module.exports = nextConfig;
